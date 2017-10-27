@@ -6,13 +6,15 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import hugo.weaving.DebugLog;
@@ -26,7 +28,6 @@ import tech.ericntd.githubsearch.models.SearchResult;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RecyclerView rvRepos;
     private ReposRvAdapter rvAdapter;
 
     @Override
@@ -34,22 +35,38 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        searchGitHubRepos();
-        rvRepos = findViewById(R.id.rv_repos);
+        final EditText etSearchQuery = findViewById(R.id.et_search_query);
+        etSearchQuery.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v,
+                                          int actionId,
+                                          KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    searchGitHubRepos(etSearchQuery.getText().toString());
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        RecyclerView rvRepos = findViewById(R.id.rv_repos);
         rvRepos.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,
                 false));
         rvAdapter = new ReposRvAdapter();
         rvRepos.setAdapter(rvAdapter);
     }
 
+    /**
+     * @param query search query e.g. "android view stars:>1000 topic:android"
+     */
     @DebugLog
-    private void searchGitHubRepos() {
+    private void searchGitHubRepos(String query) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.github.com")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         GitHubSearchService service = retrofit.create(GitHubSearchService.class);
-        Call<SearchResponse> call = service.searchRepos("android view stars:>1000 topic:android");
+        Call<SearchResponse> call = service.searchRepos(query);
         call.enqueue(new Callback<SearchResponse>() {
             @Override
             public void onResponse(Call<SearchResponse> call,
