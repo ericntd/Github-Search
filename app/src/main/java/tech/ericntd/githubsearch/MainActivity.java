@@ -1,9 +1,8 @@
 package tech.ericntd.githubsearch;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -50,9 +49,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         RecyclerView rvRepos = findViewById(R.id.rv_repos);
-        rvRepos.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,
-                false));
         rvAdapter = new ReposRvAdapter();
+        rvRepos.setHasFixedSize(true);
         rvRepos.setAdapter(rvAdapter);
     }
 
