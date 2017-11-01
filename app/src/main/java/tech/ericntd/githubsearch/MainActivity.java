@@ -1,30 +1,16 @@
 package tech.ericntd.githubsearch;
 
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import hugo.weaving.DebugLog;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import tech.ericntd.githubsearch.models.SearchResponse;
 import tech.ericntd.githubsearch.models.SearchResult;
 
 public class MainActivity extends AppCompatActivity implements SearchViewContract {
@@ -53,8 +39,7 @@ public class MainActivity extends AppCompatActivity implements SearchViewContrac
         });
 
         RecyclerView rvRepos = findViewById(R.id.rv_repos);
-        rvRepos.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,
-                false));
+        rvRepos.setHasFixedSize(true);
         rvAdapter = new SearchResultRvAdapter();
         rvRepos.setAdapter(rvAdapter);
     }
