@@ -1,5 +1,6 @@
-package tech.ericntd.githubsearch;
+package tech.ericntd.githubsearch.search;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,11 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hugo.weaving.DebugLog;
+import tech.ericntd.githubsearch.R;
 import tech.ericntd.githubsearch.models.SearchResult;
 
 public class SearchResultRvAdapter extends RecyclerView.Adapter<SearchResultRvAdapter
         .SearchResultViewHolder> {
-    List<SearchResult> results = new ArrayList<>();
+    private List<SearchResult> results = new ArrayList<>();
 
     @Override
     public SearchResultViewHolder onCreateViewHolder(ViewGroup parent,
@@ -35,7 +37,7 @@ public class SearchResultRvAdapter extends RecyclerView.Adapter<SearchResultRvAd
     }
 
     @DebugLog
-    void updateResults(List<SearchResult> results) {
+    void updateResults(@NonNull List<SearchResult> results) {
         this.results = results;
         notifyDataSetChanged();
     }

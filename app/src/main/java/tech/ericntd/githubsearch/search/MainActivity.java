@@ -1,6 +1,7 @@
-package tech.ericntd.githubsearch;
+package tech.ericntd.githubsearch.search;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import tech.ericntd.githubsearch.R;
 import tech.ericntd.githubsearch.models.SearchResult;
 
 public class MainActivity extends AppCompatActivity implements SearchViewContract {
@@ -45,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements SearchViewContrac
     }
 
     @Override
-    public void displaySearchResults(List<SearchResult> searchResults) {
+    public void displaySearchResults(@NonNull List<SearchResult> searchResults) {
         rvAdapter.updateResults(searchResults);
     }
 
