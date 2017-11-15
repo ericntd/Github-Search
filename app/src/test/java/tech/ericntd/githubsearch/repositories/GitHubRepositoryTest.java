@@ -34,8 +34,8 @@ public class GitHubRepositoryTest {
         An actual production app would easily contain a few thousands to tens of thousands unit
         tests so the difference will be significant
          */
-        GitHubRepository.GithubRepositoryCallback githubRepositoryCallback = new GitHubRepository
-                .GithubRepositoryCallback() {
+        GitHubRepository.GitHubRepositoryCallback githubRepositoryCallback = new GitHubRepository
+                .GitHubRepositoryCallback() {
             @Override
             public void handleGitHubResponse(Response<SearchResponse> response) {
 
