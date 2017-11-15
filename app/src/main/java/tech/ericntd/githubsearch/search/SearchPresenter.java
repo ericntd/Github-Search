@@ -52,10 +52,10 @@ public class SearchPresenter implements SearchPresenterContract, GitHubRepositor
             if (searchResponse != null && searchResponse.getSearchResults() != null) {
                 viewContract.displaySearchResults(searchResponse.getSearchResults());
             } else {
-                viewContract.displayError();
+                viewContract.displayError("empty response");
             }
         } else {
-            viewContract.displayError();
+            viewContract.displayError("failed to get GitHub repos");
         }
     }
 
