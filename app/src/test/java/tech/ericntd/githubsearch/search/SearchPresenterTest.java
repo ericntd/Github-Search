@@ -82,14 +82,13 @@ public class SearchPresenterTest {
     @Test
     public void handleGitHubResponse_Failure() {
         Response response = Mockito.mock(Response.class);
-        SearchResponse searchResponse = Mockito.mock(SearchResponse.class);
 
         // case No. 1
         Mockito.doReturn(false).when(response).isSuccessful();
 
         presenter.handleGitHubResponse(response);
 
-        Mockito.verify(viewContract, Mockito.times(1)).displayError();
+        Mockito.verify(viewContract, Mockito.times(1)).displayError(Mockito.anyString());
         /*
         if the following is not called, viewContract.displayError() will be
         mistakenly considered as invoked twice
@@ -101,13 +100,13 @@ public class SearchPresenterTest {
 
         presenter.handleGitHubResponse(response);
 
-        Mockito.verify(viewContract, Mockito.times(1)).displayError();
+        Mockito.verify(viewContract, Mockito.times(1)).displayError(Mockito.anyString());
     }
 
     @Test
     public void handleGitHubError() {
         presenter.handleGitHubError();
 
-        Mockito.verify(presenter, Mockito.times(1)).handleGitHubError();
+        Mockito.verify(viewContract, Mockito.times(1)).displayError();
     }
 }
