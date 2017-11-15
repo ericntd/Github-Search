@@ -18,6 +18,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_repos"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@id/et_search_query"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

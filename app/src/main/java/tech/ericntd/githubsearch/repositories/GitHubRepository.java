@@ -4,8 +4,6 @@ import android.support.annotation.NonNull;
 
 import retrofit2.Call;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import tech.ericntd.githubsearch.models.SearchResponse;
 
 /**
@@ -22,15 +20,10 @@ import tech.ericntd.githubsearch.models.SearchResponse;
  */
 public class GitHubRepository {
     private final GitHubApi remoteApi;
-    private final Callback callback;
+    private Callback callback;
 
-    public GitHubRepository(Callback callback) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.github.com")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        this.remoteApi = retrofit.create(GitHubApi.class);
-        this.callback = callback;
+    public GitHubRepository(GitHubApi remoteApi) {
+        this.remoteApi = remoteApi;
     }
 
     public void searchRepos(@NonNull String query) {
@@ -48,6 +41,10 @@ public class GitHubRepository {
                 callback.handleGitHubError();
             }
         });
+    }
+
+    public void setCallback(@NonNull Callback callback) {
+        this.callback = callback;
     }
 
     public interface Callback {

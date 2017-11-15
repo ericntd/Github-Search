@@ -1,11 +1,14 @@
 package tech.ericntd.githubsearch.search;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 import android.util.Log;
 
 import retrofit2.Response;
 import tech.ericntd.githubsearch.models.SearchResponse;
 import tech.ericntd.githubsearch.repositories.GitHubRepository;
+import tech.ericntd.githubsearch.utils.StringUtils;
 
 /**
  * ======= PRESENTATION LAYER
@@ -16,14 +19,26 @@ import tech.ericntd.githubsearch.repositories.GitHubRepository;
  * (Merged Domain Layer into the Presenter)
  * --------
  */
-public class SearchPresenter implements SearchPresenterContract, GitHubRepository.Callback {
+public class SearchPresenter implements SearchPresenterContract {
 
     private final SearchViewContract viewContract;
     private final GitHubRepository repository;
 
-    SearchPresenter(@NonNull SearchViewContract viewContract) {
+    SearchPresenter(@NonNull SearchViewContract viewContract,
+                    GitHubRepository repository) {
         this.viewContract = viewContract;
-        this.repository = new GitHubRepository(this);
+        this.repository = repository;
+        this.repository.setCallback(new GitHubRepository.Callback() {
+            @Override
+            public void handleGitHubResponse(Response<SearchResponse> response) {
+                SearchPresenter.this.handleGitHubResponse(response);
+            }
+
+            @Override
+            public void handleGitHubError() {
+                SearchPresenter.this.handleGitHubError();
+            }
+        });
     }
 
     /**
@@ -37,12 +52,14 @@ public class SearchPresenter implements SearchPresenterContract, GitHubRepositor
      * @param query search query e.g. "android view stars:>1000 topic:android"
      */
     @Override
-    public void searchGitHubRepos(@NonNull String query) {
-        repository.searchRepos(query);
+    public void searchGitHubRepos(@Nullable String query) {
+        if (!StringUtils.isEmpty(query)) {
+            repository.searchRepos(query);
+        }
     }
 
-    @Override
-    public void handleGitHubResponse(@NonNull Response<SearchResponse> response) {
+    @VisibleForTesting
+    void handleGitHubResponse(@NonNull Response<SearchResponse> response) {
         if (response.isSuccessful()) {
             SearchResponse searchResponse = response.body();
             if (searchResponse != null && searchResponse.getSearchResults() != null) {
@@ -57,8 +74,8 @@ public class SearchPresenter implements SearchPresenterContract, GitHubRepositor
         }
     }
 
-    @Override
-    public void handleGitHubError() {
+    @VisibleForTesting
+    void handleGitHubError() {
         viewContract.displayError();
     }
 }

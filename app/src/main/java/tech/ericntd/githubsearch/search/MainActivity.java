@@ -12,8 +12,12 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import tech.ericntd.githubsearch.R;
 import tech.ericntd.githubsearch.models.SearchResult;
+import tech.ericntd.githubsearch.repositories.GitHubApi;
+import tech.ericntd.githubsearch.repositories.GitHubRepository;
 
 public class MainActivity extends AppCompatActivity implements SearchViewContract {
 
@@ -24,7 +28,12 @@ public class MainActivity extends AppCompatActivity implements SearchViewContrac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final SearchPresenterContract presenter = new SearchPresenter(this);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.github.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        final GitHubRepository repository = new GitHubRepository(retrofit.create(GitHubApi.class));
+        final SearchPresenterContract presenter = new SearchPresenter(this, repository);
 
         final EditText etSearchQuery = findViewById(R.id.et_search_query);
         etSearchQuery.setOnEditorActionListener(new TextView.OnEditorActionListener() {
