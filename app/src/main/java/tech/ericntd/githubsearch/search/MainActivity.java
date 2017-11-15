@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements SearchViewContrac
                 .baseUrl("https://api.github.com")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        final GitHubRepository repository = new GitHubRepository(retrofit.create(GitHubApi.class));
+        GitHubRepository repository = new GitHubRepository(retrofit.create(GitHubApi.class));
         final SearchPresenterContract presenter = new SearchPresenter(this, repository);
 
         final EditText etSearchQuery = findViewById(R.id.et_search_query);

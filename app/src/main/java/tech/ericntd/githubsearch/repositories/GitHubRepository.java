@@ -1,6 +1,7 @@
 package tech.ericntd.githubsearch.repositories;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -19,14 +20,14 @@ import tech.ericntd.githubsearch.models.SearchResponse;
  * get confused with the repository objects we are retrieving here
  */
 public class GitHubRepository {
-    private final GitHubApi remoteApi;
+    private final GitHubApi gitHubApi;
 
-    public GitHubRepository(@NonNull final GitHubApi remoteApi) {
-        this.remoteApi = remoteApi;
+    public GitHubRepository(@NonNull final GitHubApi gitHubApi) {
+        this.gitHubApi = gitHubApi;
     }
 
-    public void searchRepos(@NonNull final String query, final GithubRepositoryCallback callback) {
-        Call<SearchResponse> call = remoteApi.searchRepos(query);
+    public void searchRepos(@NonNull final String query, @NonNull final GitHubRepositoryCallback callback) {
+        Call<SearchResponse> call = gitHubApi.searchRepos(query);
         call.enqueue(new retrofit2.Callback<SearchResponse>() {
             @Override
             public void onResponse(@NonNull Call<SearchResponse> call,
@@ -37,12 +38,13 @@ public class GitHubRepository {
             @Override
             public void onFailure(@NonNull Call<SearchResponse> call,
                                   @NonNull Throwable t) {
+                Log.e("", "onFailure", t);
                 callback.handleGitHubError();
             }
         });
     }
 
-    public interface GithubRepositoryCallback {
+    public interface GitHubRepositoryCallback {
         void handleGitHubResponse(Response<SearchResponse> response);
 
         void handleGitHubError();

@@ -7,7 +7,6 @@ import android.util.Log;
 import retrofit2.Response;
 import tech.ericntd.githubsearch.models.SearchResponse;
 import tech.ericntd.githubsearch.repositories.GitHubRepository;
-import tech.ericntd.githubsearch.utils.StringUtils;
 
 /**
  * ======= PRESENTATION LAYER
@@ -18,13 +17,14 @@ import tech.ericntd.githubsearch.utils.StringUtils;
  * (Merged Domain Layer into the Presenter)
  * --------
  */
-public class SearchPresenter implements SearchPresenterContract, GitHubRepository.GithubRepositoryCallback {
+public class SearchPresenter implements SearchPresenterContract, GitHubRepository
+        .GitHubRepositoryCallback {
 
     private final SearchViewContract viewContract;
     private final GitHubRepository repository;
 
-    SearchPresenter(@NonNull SearchViewContract viewContract,
-                    GitHubRepository repository) {
+    SearchPresenter(@NonNull final SearchViewContract viewContract,
+                    @NonNull final GitHubRepository repository) {
         this.viewContract = viewContract;
         this.repository = repository;
     }
@@ -40,13 +40,14 @@ public class SearchPresenter implements SearchPresenterContract, GitHubRepositor
      * @param query search query e.g. "android view stars:>1000 topic:android"
      */
     @Override
-    public void searchGitHubRepos(@Nullable String query) {
-        if (!StringUtils.isEmpty(query)) {
+    public void searchGitHubRepos(@Nullable final String query) {
+        if (query != null && query.length() > 0) {
             repository.searchRepos(query, this);
         }
     }
 
-    public void handleGitHubResponse(@NonNull Response<SearchResponse> response) {
+    @Override
+    public void handleGitHubResponse(@NonNull final Response<SearchResponse> response) {
         if (response.isSuccessful()) {
             SearchResponse searchResponse = response.body();
             if (searchResponse != null && searchResponse.getSearchResults() != null) {
@@ -61,6 +62,7 @@ public class SearchPresenter implements SearchPresenterContract, GitHubRepositor
         }
     }
 
+    @Override
     public void handleGitHubError() {
         viewContract.displayError();
     }
