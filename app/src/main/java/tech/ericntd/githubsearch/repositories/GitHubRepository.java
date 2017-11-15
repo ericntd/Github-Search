@@ -20,13 +20,12 @@ import tech.ericntd.githubsearch.models.SearchResponse;
  */
 public class GitHubRepository {
     private final GitHubApi remoteApi;
-    private Callback callback;
 
-    public GitHubRepository(GitHubApi remoteApi) {
+    public GitHubRepository(@NonNull final GitHubApi remoteApi) {
         this.remoteApi = remoteApi;
     }
 
-    public void searchRepos(@NonNull String query) {
+    public void searchRepos(@NonNull final String query, final GithubRepositoryCallback callback) {
         Call<SearchResponse> call = remoteApi.searchRepos(query);
         call.enqueue(new retrofit2.Callback<SearchResponse>() {
             @Override
@@ -43,11 +42,7 @@ public class GitHubRepository {
         });
     }
 
-    public void setCallback(@NonNull Callback callback) {
-        this.callback = callback;
-    }
-
-    public interface Callback {
+    public interface GithubRepositoryCallback {
         void handleGitHubResponse(Response<SearchResponse> response);
 
         void handleGitHubError();

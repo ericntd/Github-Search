@@ -24,10 +24,9 @@ public class SearchPresenterTest {
 
     @Before
     public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-        Mockito.doNothing().when(repository).setCallback(Mockito.any(GitHubRepository.Callback
-                .class));
+        MockitoAnnotations.initMocks(this);// required for the "@Mock" annotations
 
+        // Make presenter a mock while using mock repository and viewContract created above
         presenter = Mockito.spy(new SearchPresenter(viewContract, repository));
     }
 
@@ -39,7 +38,7 @@ public class SearchPresenterTest {
         presenter.searchGitHubRepos(searchQuery);
 
         // Validation
-        Mockito.verify(repository, Mockito.never()).searchRepos(searchQuery);
+        Mockito.verify(repository, Mockito.never()).searchRepos(searchQuery, presenter);
     }
 
     @Test
@@ -50,7 +49,7 @@ public class SearchPresenterTest {
         presenter.searchGitHubRepos(searchQuery);
 
         // Validation
-        Mockito.verify(repository, Mockito.times(1)).searchRepos(searchQuery);
+        Mockito.verify(repository, Mockito.times(1)).searchRepos(searchQuery, presenter);
     }
 
     /**
@@ -62,6 +61,7 @@ public class SearchPresenterTest {
      * .com/mockito/mockito/wiki/What's-new-in-Mockito-2#mock-the-unmockable-opt-in-mocking-of
      * -final-classesmethods">here</a>
      */
+    @SuppressWarnings("unchecked")
     @Test
     public void handleGitHubResponse_Success() {
         Response response = Mockito.mock(Response.class);

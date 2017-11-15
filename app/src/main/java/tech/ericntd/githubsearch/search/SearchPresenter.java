@@ -2,7 +2,6 @@ package tech.ericntd.githubsearch.search;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
 import android.util.Log;
 
 import retrofit2.Response;
@@ -19,7 +18,7 @@ import tech.ericntd.githubsearch.utils.StringUtils;
  * (Merged Domain Layer into the Presenter)
  * --------
  */
-public class SearchPresenter implements SearchPresenterContract {
+public class SearchPresenter implements SearchPresenterContract, GitHubRepository.GithubRepositoryCallback {
 
     private final SearchViewContract viewContract;
     private final GitHubRepository repository;
@@ -28,17 +27,6 @@ public class SearchPresenter implements SearchPresenterContract {
                     GitHubRepository repository) {
         this.viewContract = viewContract;
         this.repository = repository;
-        this.repository.setCallback(new GitHubRepository.Callback() {
-            @Override
-            public void handleGitHubResponse(Response<SearchResponse> response) {
-                SearchPresenter.this.handleGitHubResponse(response);
-            }
-
-            @Override
-            public void handleGitHubError() {
-                SearchPresenter.this.handleGitHubError();
-            }
-        });
     }
 
     /**
@@ -54,12 +42,11 @@ public class SearchPresenter implements SearchPresenterContract {
     @Override
     public void searchGitHubRepos(@Nullable String query) {
         if (!StringUtils.isEmpty(query)) {
-            repository.searchRepos(query);
+            repository.searchRepos(query, this);
         }
     }
 
-    @VisibleForTesting
-    void handleGitHubResponse(@NonNull Response<SearchResponse> response) {
+    public void handleGitHubResponse(@NonNull Response<SearchResponse> response) {
         if (response.isSuccessful()) {
             SearchResponse searchResponse = response.body();
             if (searchResponse != null && searchResponse.getSearchResults() != null) {
@@ -74,8 +61,7 @@ public class SearchPresenter implements SearchPresenterContract {
         }
     }
 
-    @VisibleForTesting
-    void handleGitHubError() {
+    public void handleGitHubError() {
         viewContract.displayError();
     }
 }
