@@ -51,7 +51,6 @@ public class SearchResultRvAdapter extends RecyclerView.Adapter<SearchResultRvAd
             tvRepoName = itemView.findViewById(R.id.tv_repo_name);
         }
 
-        @DebugLog
         void bind(SearchResult searchResult) {
             tvRepoName.setText(searchResult.getFullName());
         }
