@@ -2,7 +2,6 @@ package tech.ericntd.githubsearch.search;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import retrofit2.Response;
 import tech.ericntd.githubsearch.models.SearchResponse;
@@ -53,11 +52,9 @@ public class SearchPresenter implements SearchPresenterContract, GitHubRepositor
             if (searchResponse != null && searchResponse.getSearchResults() != null) {
                 viewContract.displaySearchResults(searchResponse.getSearchResults());
             } else {
-                Log.w("", "empty response");
                 viewContract.displayError();
             }
         } else {
-            Log.w("", "not a success");
             viewContract.displayError();
         }
     }
