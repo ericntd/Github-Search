@@ -62,6 +62,11 @@ public class MainActivity extends AppCompatActivity implements SearchViewContrac
 
     @Override
     public void displayError() {
-        Toast.makeText(this, "some error happned", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "some error happened", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void displayError(String s) {
+        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
     }
 }

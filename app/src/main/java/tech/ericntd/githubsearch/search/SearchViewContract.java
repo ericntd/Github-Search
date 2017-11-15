@@ -8,5 +8,8 @@ import tech.ericntd.githubsearch.models.SearchResult;
 
 public interface SearchViewContract {
     void displaySearchResults(@NonNull List<SearchResult> searchResults);
+
     void displayError();
+
+    void displayError(String s);
 }
