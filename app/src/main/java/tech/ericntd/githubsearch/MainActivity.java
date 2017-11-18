@@ -63,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
                 .baseUrl("https://api.github.com")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        GitHubSearchService service = retrofit.create(GitHubSearchService.class);
-        Call<SearchResponse> call = service.searchRepos(query);
+        GitHubApi gitHubApi = retrofit.create(GitHubApi.class);
+        Call<SearchResponse> call = gitHubApi.searchRepos(query);
         call.enqueue(new Callback<SearchResponse>() {
             @Override
             public void onResponse(Call<SearchResponse> call,

@@ -6,7 +6,7 @@ import retrofit2.http.Headers;
 import retrofit2.http.Query;
 import tech.ericntd.githubsearch.models.SearchResponse;
 
-public interface GitHubSearchService {
+public interface GitHubApi {
     @Headers({"Accept: application/vnd.github.mercy-preview+json"})
     @GET("search/repositories")
     Call<SearchResponse> searchRepos(@Query("q") String term);
