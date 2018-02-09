@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Github Search</string>
+    <string name="num_of_repos">Number of repos found: %d</string>
+    <string name="err_generic">Something went wrong</string>
 </resources>

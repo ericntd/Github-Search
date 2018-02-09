@@ -22,11 +22,14 @@ import tech.ericntd.githubsearch.repositories.GitHubRepository;
 public class MainActivity extends AppCompatActivity implements SearchViewContract {
 
     private SearchResultRvAdapter rvAdapter;
+    private TextView tvStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        tvStatus = findViewById(R.id.tv_status);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.github.com")
@@ -42,7 +45,9 @@ public class MainActivity extends AppCompatActivity implements SearchViewContrac
                                           int actionId,
                                           KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    presenter.searchGitHubRepos(etSearchQuery.getText().toString());
+                    presenter.searchGitHubRepos(etSearchQuery
+                            .getText()
+                            .toString());
                     return true;
                 }
                 return false;
@@ -57,16 +62,21 @@ public class MainActivity extends AppCompatActivity implements SearchViewContrac
 
     @Override
     public void displaySearchResults(@NonNull List<SearchResult> searchResults) {
+        tvStatus.setText(String.format(getString(R.string.num_of_repos), searchResults.size()));
         rvAdapter.updateResults(searchResults);
     }
 
     @Override
     public void displayError() {
-        Toast.makeText(this, "some error happened", Toast.LENGTH_SHORT).show();
+        tvStatus.setText(getString(R.string.err_generic));
+        Toast.makeText(this, getString(R.string.err_generic), Toast.LENGTH_SHORT)
+                .show();
     }
 
     @Override
     public void displayError(String s) {
-        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
+        tvStatus.setText(s);
+        Toast.makeText(this, s, Toast.LENGTH_SHORT)
+                .show();
     }
 }
