@@ -76,7 +76,8 @@ public class SearchPresenterTest {
 
         presenter.handleGitHubResponse(response);
 
-        Mockito.verify(viewContract, Mockito.times(1)).displaySearchResults(searchResults);
+        Mockito.verify(viewContract, Mockito.times(1)).displaySearchResults(searchResults,
+                searchResponse.getTotalCount());
     }
 
     @Test

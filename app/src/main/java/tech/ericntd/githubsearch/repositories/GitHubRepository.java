@@ -1,6 +1,8 @@
 package tech.ericntd.githubsearch.repositories;
 
 import android.support.annotation.NonNull;
+import android.support.test.espresso.IdlingRegistry;
+import android.support.test.espresso.idling.CountingIdlingResource;
 import android.util.Log;
 
 import retrofit2.Call;
@@ -19,7 +21,8 @@ import tech.ericntd.githubsearch.models.SearchResponse;
  * "Repository" in the class name here means "repository" layer in MVP-Clean architecture, don't
  * get confused with the repository objects we are retrieving here
  * <p>
- * TODO unit test this using <a href="https://stackoverflow.com/a/35826483/541624">these instructions</>
+ * TODO unit test this using <a href="https://stackoverflow.com/a/35826483/541624">these
+ * instructions</>
  */
 public class GitHubRepository {
     private final GitHubApi gitHubApi;
@@ -30,16 +33,24 @@ public class GitHubRepository {
 
     public void searchRepos(@NonNull final String query,
                             @NonNull final GitHubRepositoryCallback callback) {
-        Call<SearchResponse> call = gitHubApi.searchRepos(query);
+        final CountingIdlingResource countingIdlingResource = new CountingIdlingResource
+                ("githubrepo");
+        IdlingRegistry.getInstance().register(countingIdlingResource);
+        countingIdlingResource.increment();
+        final Call<SearchResponse> call = gitHubApi.searchRepos(query);
         call.enqueue(new retrofit2.Callback<SearchResponse>() {
-            @Override public void onResponse(@NonNull Call<SearchResponse> call,
-                                             @NonNull Response<SearchResponse> response) {
+            @Override
+            public void onResponse(@NonNull Call<SearchResponse> call,
+                                   @NonNull Response<SearchResponse> response) {
+                countingIdlingResource.decrement();
                 callback.handleGitHubResponse(response);
             }
 
-            @Override public void onFailure(@NonNull Call<SearchResponse> call,
-                                            @NonNull Throwable t) {
+            @Override
+            public void onFailure(@NonNull Call<SearchResponse> call,
+                                  @NonNull Throwable t) {
                 Log.e("", "onFailure", t);
+                countingIdlingResource.decrement();
                 callback.handleGitHubError();
             }
         });

@@ -61,8 +61,9 @@ public class MainActivity extends AppCompatActivity implements SearchViewContrac
     }
 
     @Override
-    public void displaySearchResults(@NonNull List<SearchResult> searchResults) {
-        tvStatus.setText(String.format(getString(R.string.num_of_repos), searchResults.size()));
+    public void displaySearchResults(@NonNull List<SearchResult> searchResults,
+                                     @NonNull Integer totalCount) {
+        tvStatus.setText(String.format(getString(R.string.num_of_repos), totalCount));
         rvAdapter.updateResults(searchResults);
     }
 
