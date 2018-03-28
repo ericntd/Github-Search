@@ -76,14 +76,14 @@ public class MainActivityTest {
         appCompatEditText3.perform(pressImeActionButton());
 
         ViewInteraction textView = onView(
-                allOf(withId(R.id.tv_status), withText(startsWith("Number of repos found")),
+                allOf(withId(R.id.tv_status), withText(startsWith("Number of repos found: 668764")),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
                                 1),
                         isDisplayed()));
-        textView.check(matches(withText(startsWith("Number of repos found"))));
+        textView.check(matches(withText(startsWith("Number of repos found: 668764"))));
     }
 
     private static Matcher<View> childAtPosition(
