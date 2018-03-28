@@ -21,7 +21,7 @@ public class GitHubRepositoryTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        repository = Mockito.spy(new GitHubRepository(gitHubApi));
+        repository = Mockito.spy(new RealGitHubRepositoryImpl(gitHubApi));
     }
 
     @SuppressWarnings("unchecked")
@@ -34,7 +34,7 @@ public class GitHubRepositoryTest {
         An actual production app would easily contain a few thousands to tens of thousands unit
         tests so the difference will be significant
          */
-        GitHubRepository.GitHubRepositoryCallback githubRepositoryCallback = new GitHubRepository
+        RealGitHubRepositoryImpl.GitHubRepositoryCallback githubRepositoryCallback = new RealGitHubRepositoryImpl
                 .GitHubRepositoryCallback() {
             @Override
             public void handleGitHubResponse(Response<SearchResponse> response) {

@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import retrofit2.Response;
 import tech.ericntd.githubsearch.models.SearchResponse;
 import tech.ericntd.githubsearch.repositories.GitHubRepository;
+import tech.ericntd.githubsearch.repositories.RealGitHubRepositoryImpl;
 
 /**
  * ======= PRESENTATION LAYER
@@ -16,7 +17,7 @@ import tech.ericntd.githubsearch.repositories.GitHubRepository;
  * (Merged Domain Layer into the Presenter)
  * --------
  */
-public class SearchPresenter implements SearchPresenterContract, GitHubRepository
+public class SearchPresenter implements SearchPresenterContract, RealGitHubRepositoryImpl
         .GitHubRepositoryCallback {
 
     private final SearchViewContract viewContract;
@@ -32,7 +33,7 @@ public class SearchPresenter implements SearchPresenterContract, GitHubRepositor
      * In a MVP-Clean architecutre, the presenter should not handle the communication with the
      * remote API.
      * Instead, communication with data sources should be done on the "repository" layer,
-     * see {@link GitHubRepository}.
+     * see {@link RealGitHubRepositoryImpl}.
      * The presenter should focus on the business logics e.g. filter, sort, combine the GitHub
      * repos to returned to the view.
      *
