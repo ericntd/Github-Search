@@ -18,6 +18,12 @@ public class SearchResponse {
     @Expose
     private List<SearchResult> searchResults = null;
 
+    public SearchResponse(@NonNull Integer totalCount,
+                          @NonNull List<SearchResult> searchResults) {
+        this.totalCount = totalCount;
+        this.searchResults = searchResults;
+    }
+
     public Integer getTotalCount() {
         return totalCount;
     }

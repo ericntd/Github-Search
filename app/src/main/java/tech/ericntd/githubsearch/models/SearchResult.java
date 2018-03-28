@@ -1,5 +1,7 @@
 package tech.ericntd.githubsearch.models;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -41,6 +43,10 @@ public class SearchResult {
     @Expose
     private Double score;
 
+    public SearchResult(@NonNull String name) {
+        this.name = name;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -51,41 +57,5 @@ public class SearchResult {
 
     public String getFullName() {
         return fullName;
-    }
-
-    public Boolean get_private() {
-        return _private;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public Integer getSize() {
-        return size;
-    }
-
-    public Integer getStargazersCount() {
-        return stargazersCount;
-    }
-
-    public String getLanguage() {
-        return language;
-    }
-
-    public Boolean getHasWiki() {
-        return hasWiki;
-    }
-
-    public Boolean getArchived() {
-        return archived;
-    }
-
-    public Double getScore() {
-        return score;
     }
 }
