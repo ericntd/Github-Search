@@ -1,8 +1,5 @@
 package tech.ericntd.githubsearch;
 
-import android.app.Application;
-import android.content.Context;
-
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -15,12 +12,6 @@ import tech.ericntd.githubsearch.repositories.RealGitHubRepositoryImpl;
 
 @Module
 public class AppModule {
-
-    @Provides
-    @Singleton
-    Context provideContext(Application application) {
-        return application;
-    }
 
     @Provides
     @Singleton
