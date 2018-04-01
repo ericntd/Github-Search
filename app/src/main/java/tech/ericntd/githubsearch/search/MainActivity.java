@@ -2,7 +2,6 @@ package tech.ericntd.githubsearch.search;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
@@ -12,17 +11,16 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import tech.ericntd.githubsearch.GitHubRepoProvider;
+import javax.inject.Inject;
+
+import dagger.android.support.DaggerAppCompatActivity;
 import tech.ericntd.githubsearch.R;
 import tech.ericntd.githubsearch.models.SearchResult;
-import tech.ericntd.githubsearch.repositories.GitHubApi;
-import tech.ericntd.githubsearch.repositories.GitHubRepository;
-import tech.ericntd.githubsearch.repositories.RealGitHubRepositoryImpl;
 
-public class MainActivity extends AppCompatActivity implements SearchViewContract {
+public class MainActivity extends DaggerAppCompatActivity implements SearchViewContract {
 
+    @Inject
+    SearchPresenter presenter;
     private SearchResultRvAdapter rvAdapter;
     private TextView tvStatus;
 
@@ -33,8 +31,8 @@ public class MainActivity extends AppCompatActivity implements SearchViewContrac
 
         tvStatus = findViewById(R.id.tv_status);
 
-        final SearchPresenterContract presenter = new SearchPresenter(this, GitHubRepoProvider
-                .provide());
+//        final SearchPresenterContract presenter = new SearchPresenter(this, GitHubRepoProvider
+//                .provide());
 
         final EditText etSearchQuery = findViewById(R.id.et_search_query);
         etSearchQuery.setOnEditorActionListener(new TextView.OnEditorActionListener() {
