@@ -7,15 +7,6 @@ import retrofit2.Response;
 import tech.ericntd.githubsearch.models.SearchResponse;
 import tech.ericntd.githubsearch.repositories.GitHubRepository;
 
-/**
- * ======= PRESENTATION LAYER
- * <p>
- * Simplified version of MVP-Clean as described
- * <a href="https://github.com/android10/Android-CleanArchitecture">here</a> and
- * <a href="https://github.com/googlesamples/android-architecture/tree/todo-mvp-clean/">here</a>
- * (Merged Domain Layer into the Presenter)
- * --------
- */
 public class SearchPresenter implements SearchPresenterContract, GitHubRepository
         .GitHubRepositoryCallback {
 

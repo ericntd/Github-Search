@@ -7,18 +7,6 @@ import retrofit2.Call;
 import retrofit2.Response;
 import tech.ericntd.githubsearch.models.SearchResponse;
 
-/**
- * ======= DATA LAYER
- * <p>
- * Simplified version of MVP-Clean as described
- * <a href="https://github.com/android10/Android-CleanArchitecture">here</a> and
- * <a href="https://github.com/googlesamples/android-architecture/tree/todo-mvp-clean/">here</a>
- * (Merged Domain Layer into the Presenter)
- * -------
- * <p>
- * "Repository" in the class name here means "repository" layer in MVP-Clean architecture, don't
- * get confused with the repository objects we are retrieving here
- */
 public class GitHubRepository {
     private final GitHubApi gitHubApi;
 
@@ -26,7 +14,8 @@ public class GitHubRepository {
         this.gitHubApi = gitHubApi;
     }
 
-    public void searchRepos(@NonNull final String query, @NonNull final GitHubRepositoryCallback callback) {
+    public void searchRepos(@NonNull final String query,
+                            @NonNull final GitHubRepositoryCallback callback) {
         Call<SearchResponse> call = gitHubApi.searchRepos(query);
         call.enqueue(new retrofit2.Callback<SearchResponse>() {
             @Override
