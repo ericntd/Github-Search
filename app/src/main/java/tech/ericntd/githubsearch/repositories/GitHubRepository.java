@@ -7,20 +7,6 @@ import retrofit2.Call;
 import retrofit2.Response;
 import tech.ericntd.githubsearch.models.SearchResponse;
 
-/**
- * ======= DATA LAYER
- * <p>
- * Simplified version of MVP-Clean as described
- * <a href="https://github.com/android10/Android-CleanArchitecture">here</a> and
- * <a href="https://github.com/googlesamples/android-architecture/tree/todo-mvp-clean/">here</a>
- * (Merged Domain Layer into the Presenter)
- * -------
- * <p>
- * "Repository" in the class name here means "repository" layer in MVP-Clean architecture, don't
- * get confused with the repository objects we are retrieving here
- * <p>
- * TODO unit test this using <a href="https://stackoverflow.com/a/35826483/541624">these instructions</>
- */
 public class GitHubRepository {
     private final GitHubApi gitHubApi;
 
