@@ -20,12 +20,11 @@ public class SearchPresenter implements SearchPresenterContract, GitHubRepositor
     }
 
     /**
-     * In a MVP-Clean architecutre, the presenter should not handle the communication with the
-     * remote API.
-     * Instead, communication with data sources should be done on the "repository" layer,
-     * see {@link GitHubRepository}.
-     * The presenter should focus on the business logics e.g. filter, sort, combine the GitHub
-     * repos to returned to the view.
+     * In a MVP architecutre, the responsibility to fetch data from remote or local sources
+     * should be delegated to the "repositories" in the Data Layer
+     * <p>
+     * The presenter should focus on the business logics e.g. filter, sort, combine the data to
+     * present in the view
      *
      * @param query search query e.g. "android view stars:>1000 topic:android"
      */
