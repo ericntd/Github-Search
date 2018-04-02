@@ -35,13 +35,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         final EditText etSearchQuery = findViewById(R.id.et_search_query);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.github.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        final GitHubApi gitHubApi = retrofit.create(GitHubApi.class);
+
         etSearchQuery.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v,
                                           int actionId,
                                           KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    searchGitHubRepos(etSearchQuery.getText().toString());
+                    searchGitHubRepos(gitHubApi, etSearchQuery.getText().toString());
                     return true;
                 }
                 return false;
@@ -55,15 +62,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * @param query search query e.g. "android view stars:>1000 topic:android"
+     * @param gitHubApi Retrofit interface to fetch data from GitHub
+     * @param query     search query e.g. "android view stars:>1000 topic:android"
      */
     @DebugLog
-    private void searchGitHubRepos(String query) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.github.com")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        GitHubApi gitHubApi = retrofit.create(GitHubApi.class);
+    private void searchGitHubRepos(GitHubApi gitHubApi,
+                                   String query) {
         Call<SearchResponse> call = gitHubApi.searchRepos(query);
         call.enqueue(new Callback<SearchResponse>() {
             @Override
@@ -97,48 +101,5 @@ public class MainActivity extends AppCompatActivity {
     @DebugLog
     private void handleSearchResults(List<SearchResult> searchResults) {
         rvAdapter.updateResults(searchResults);
-    }
-
-    private static class ReposRvAdapter extends RecyclerView.Adapter<RepoViewHolder> {
-        List<SearchResult> results = new ArrayList<>();
-
-        @Override
-        public RepoViewHolder onCreateViewHolder(ViewGroup parent,
-                                                 int viewType) {
-            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-            return new RepoViewHolder(inflater.inflate(R.layout.rv_item_repo, null));
-        }
-
-        @Override
-        public void onBindViewHolder(RepoViewHolder holder,
-                                     int position) {
-            holder.bind(results.get(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            return results.size();
-        }
-
-        @DebugLog
-        void updateResults(List<SearchResult> results) {
-            this.results = results;
-            notifyDataSetChanged();
-        }
-    }
-
-    private static class RepoViewHolder extends RecyclerView.ViewHolder {
-        private final TextView tvRepoName;
-
-        RepoViewHolder(View itemView) {
-            super(itemView);
-
-            tvRepoName = itemView.findViewById(R.id.tv_repo_name);
-        }
-
-        @DebugLog
-        void bind(SearchResult searchResult) {
-            tvRepoName.setText(searchResult.getFullName());
-        }
     }
 }
