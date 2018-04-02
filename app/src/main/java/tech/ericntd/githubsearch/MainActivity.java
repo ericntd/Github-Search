@@ -2,6 +2,7 @@ package tech.ericntd.githubsearch;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +81,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<SearchResponse> call,
                                   Throwable t) {
-                Log.e("", "onFailure", t);
+                Log.e("", "", t);
+                handleError("E103 - System error");
             }
         });
     }
@@ -91,11 +94,15 @@ public class MainActivity extends AppCompatActivity {
             if (searchResponse != null) {
                 handleSearchResults(searchResponse.getSearchResults());
             } else {
-                Log.w("", "empty response");
+                handleError("E102 - System error");
             }
         } else {
-            Log.w("", "not a success");
+            handleError("E102 - System error");
         }
+    }
+
+    private void handleError(String s) {
+        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
     }
 
     @DebugLog
