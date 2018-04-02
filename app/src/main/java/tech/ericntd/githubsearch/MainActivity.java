@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 handleError("E102 - System error");
             }
         } else {
-            handleError("E102 - System error");
+            handleError("E101 - System error");
         }
     }
 
