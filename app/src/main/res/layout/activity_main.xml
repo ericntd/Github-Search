@@ -9,18 +9,28 @@
     <EditText
         android:id="@+id/et_search_query"
         android:layout_width="match_parent"
-        android:maxLines="1"
-        android:singleLine="true"
-        android:inputType="text"
+        android:layout_height="wrap_content"
+        android:hint="Enter keyword e.g. android"
         android:imeOptions="actionSearch"
-        android:layout_height="wrap_content" />
+        android:inputType="text"
+        android:maxLines="1"
+        android:paddingLeft="16dp"
+        android:singleLine="true" />
+
+    <TextView
+        android:id="@+id/tv_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        app:layout_constraintTop_toBottomOf="@id/et_search_query"
+        tools:text="Number of results: 1000000" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_repos"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/et_search_query"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/tv_status" />
 
 </android.support.constraint.ConstraintLayout>

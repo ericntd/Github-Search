@@ -2,6 +2,7 @@ package tech.ericntd.githubsearch.search;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -22,11 +24,15 @@ import tech.ericntd.githubsearch.repositories.GitHubRepository;
 public class MainActivity extends AppCompatActivity implements SearchViewContract {
 
     private SearchResultRvAdapter rvAdapter;
+    private TextView tvStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        tvStatus = findViewById(R.id.tv_status);
+        final EditText etSearchQuery = findViewById(R.id.et_search_query);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.github.com")
@@ -35,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements SearchViewContrac
         GitHubRepository repository = new GitHubRepository(retrofit.create(GitHubApi.class));
         final SearchPresenterContract presenter = new SearchPresenter(this, repository);
 
-        final EditText etSearchQuery = findViewById(R.id.et_search_query);
         etSearchQuery.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v,
@@ -56,8 +61,10 @@ public class MainActivity extends AppCompatActivity implements SearchViewContrac
     }
 
     @Override
-    public void displaySearchResults(@NonNull List<SearchResult> searchResults) {
+    public void displaySearchResults(@NonNull List<SearchResult> searchResults,
+                                     @Nullable Integer totalCount) {
         rvAdapter.updateResults(searchResults);
+        tvStatus.setText(String.format(Locale.US, "Number of results: %d", totalCount));
     }
 
     @Override

@@ -40,7 +40,7 @@ public class SearchPresenter implements SearchPresenterContract, GitHubRepositor
         if (response.isSuccessful()) {
             SearchResponse searchResponse = response.body();
             if (searchResponse != null && searchResponse.getSearchResults() != null) {
-                viewContract.displaySearchResults(searchResponse.getSearchResults());
+                viewContract.displaySearchResults(searchResponse.getSearchResults(), searchResponse.getTotalCount());
             } else {
                 viewContract.displayError("E102 - System error");
             }
