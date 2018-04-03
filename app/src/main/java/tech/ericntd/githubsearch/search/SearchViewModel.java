@@ -1,21 +1,25 @@
 package tech.ericntd.githubsearch.search;
 
+import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
+import android.util.Log;
+
+import java.util.Locale;
 
 import retrofit2.Response;
 import tech.ericntd.githubsearch.models.SearchResponse;
 import tech.ericntd.githubsearch.repositories.GitHubRepository;
 
-public class SearchPresenter implements SearchPresenterContract, GitHubRepository
+public class SearchViewModel implements GitHubRepository
         .GitHubRepositoryCallback {
 
-    private final SearchViewContract viewContract;
+    public ObservableField<String> status = new ObservableField<>();
+
     private final GitHubRepository repository;
 
-    SearchPresenter(@NonNull final SearchViewContract viewContract,
-                    @NonNull final GitHubRepository repository) {
-        this.viewContract = viewContract;
+    SearchViewModel(@NonNull final GitHubRepository repository) {
         this.repository = repository;
     }
 
@@ -28,7 +32,6 @@ public class SearchPresenter implements SearchPresenterContract, GitHubRepositor
      *
      * @param query search query e.g. "android view stars:>1000 topic:android"
      */
-    @Override
     public void searchGitHubRepos(@Nullable final String query) {
         if (query != null && query.length() > 0) {
             repository.searchRepos(query, this);
@@ -40,17 +43,19 @@ public class SearchPresenter implements SearchPresenterContract, GitHubRepositor
         if (response.isSuccessful()) {
             SearchResponse searchResponse = response.body();
             if (searchResponse != null && searchResponse.getSearchResults() != null) {
-                viewContract.displaySearchResults(searchResponse.getSearchResults(), searchResponse.getTotalCount());
-            } else {
-                viewContract.displayError("E102 - System error");
+                renderSuccess(searchResponse);
             }
-        } else {
-            viewContract.displayError("E101 - System error");
         }
+    }
+
+    @VisibleForTesting
+    void renderSuccess(SearchResponse searchResponse) {
+        status.set(String.format(Locale.US, "Number of results: %d", searchResponse
+                .getTotalCount()));
     }
 
     @Override
     public void handleGitHubError() {
-        viewContract.displayError();
+        Log.w("", "handleGitHubError");
     }
 }

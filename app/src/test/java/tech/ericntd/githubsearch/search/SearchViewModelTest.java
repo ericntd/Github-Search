@@ -1,12 +1,12 @@
 package tech.ericntd.githubsearch.search;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -15,20 +15,18 @@ import tech.ericntd.githubsearch.models.SearchResponse;
 import tech.ericntd.githubsearch.models.SearchResult;
 import tech.ericntd.githubsearch.repositories.GitHubRepository;
 
-public class SearchPresenterTest {
-    private SearchPresenter presenter;
+public class SearchViewModelTest {
+    private SearchViewModel viewModel;
 
     @Mock
     private GitHubRepository repository;
-    @Mock
-    private SearchViewContract viewContract;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);// required for the "@Mock" annotations
 
-        // Make presenter a mock while using mock repository and viewContract created above
-        presenter = Mockito.spy(new SearchPresenter(viewContract, repository));
+        // Make viewModel a mock while using mock repository and viewContract created above
+        viewModel = Mockito.spy(new SearchViewModel(repository));
     }
 
     @Test
@@ -36,10 +34,10 @@ public class SearchPresenterTest {
         String searchQuery = null;
 
         // Trigger
-        presenter.searchGitHubRepos(searchQuery);
+        viewModel.searchGitHubRepos(searchQuery);
 
         // Validation
-        Mockito.verify(repository, Mockito.never()).searchRepos(searchQuery, presenter);
+        Mockito.verify(repository, Mockito.never()).searchRepos(searchQuery, viewModel);
     }
 
     @Test
@@ -47,10 +45,10 @@ public class SearchPresenterTest {
         String searchQuery = "some query";
 
         // Trigger
-        presenter.searchGitHubRepos(searchQuery);
+        viewModel.searchGitHubRepos(searchQuery);
 
         // Validation
-        Mockito.verify(repository, Mockito.times(1)).searchRepos(searchQuery, presenter);
+        Mockito.verify(repository, Mockito.times(1)).searchRepos(searchQuery, viewModel);
     }
 
     @SuppressWarnings("unchecked")
@@ -64,45 +62,25 @@ public class SearchPresenterTest {
         Mockito.doReturn(searchResults).when(searchResponse).getSearchResults();
 
         // Trigger
-        presenter.handleGitHubResponse(response);
+        viewModel.handleGitHubResponse(response);
 
         // Validation
-        Mockito.verify(viewContract, Mockito.times(1)).displaySearchResults(searchResults);
+        Mockito.verify(viewModel, Mockito.times(1)).renderSuccess(searchResponse);
     }
 
     @SuppressWarnings("unchecked")
     @Test
-    public void handleGitHubResponse_Failure() {
+    public void renderSuccess() {
         Response response = Mockito.mock(Response.class);
-        Mockito.doReturn(false).when(response).isSuccessful();
-
-        // Trigger
-        presenter.handleGitHubResponse(response);
-
-        // Validation
-        Mockito.verify(viewContract, Mockito.times(1)).displayError("E101 - System error");
-    }
-
-    @SuppressWarnings("unchecked")
-    @Test
-    public void handleGitHubResponse_EmptyResponse() {
-        Response response = Mockito.mock(Response.class);
+        SearchResponse searchResponse = Mockito.mock(SearchResponse.class);
         Mockito.doReturn(true).when(response).isSuccessful();
-        Mockito.doReturn(null).when(response).body();
+        Mockito.doReturn(searchResponse).when(response).body();
+        Mockito.doReturn(1001).when(searchResponse).getTotalCount();
 
         // Trigger
-        presenter.handleGitHubResponse(response);
+        viewModel.handleGitHubResponse(response);
 
         // Validation
-        Mockito.verify(viewContract, Mockito.times(1)).displayError("E102 - System error");
-    }
-
-    @Test
-    public void handleGitHubError() {
-        // Trigger
-        presenter.handleGitHubError();
-
-        // Validation
-        Mockito.verify(viewContract, Mockito.times(1)).displayError();
+        Assert.assertEquals("Number of results: 1001", viewModel.status.get());
     }
 }

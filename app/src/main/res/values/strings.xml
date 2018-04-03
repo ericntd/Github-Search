@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Github Search</string>
+    <string name="status">Number of results: %d</string>
 </resources>

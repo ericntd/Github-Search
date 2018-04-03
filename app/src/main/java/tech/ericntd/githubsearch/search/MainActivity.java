@@ -1,5 +1,6 @@
 package tech.ericntd.githubsearch.search;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,21 +18,20 @@ import java.util.Locale;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import tech.ericntd.githubsearch.R;
+import tech.ericntd.githubsearch.databinding.ActivityMainBinding;
 import tech.ericntd.githubsearch.models.SearchResult;
 import tech.ericntd.githubsearch.repositories.GitHubApi;
 import tech.ericntd.githubsearch.repositories.GitHubRepository;
 
-public class MainActivity extends AppCompatActivity implements SearchViewContract {
+public class MainActivity extends AppCompatActivity {
 
     private SearchResultRvAdapter rvAdapter;
-    private TextView tvStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-        tvStatus = findViewById(R.id.tv_status);
         final EditText etSearchQuery = findViewById(R.id.et_search_query);
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -39,7 +39,8 @@ public class MainActivity extends AppCompatActivity implements SearchViewContrac
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         GitHubRepository repository = new GitHubRepository(retrofit.create(GitHubApi.class));
-        final SearchPresenterContract presenter = new SearchPresenter(this, repository);
+        final SearchViewModel viewModel = new SearchViewModel(repository);
+        binding.setVm(viewModel);
 
         etSearchQuery.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements SearchViewContrac
                                           int actionId,
                                           KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    presenter.searchGitHubRepos(etSearchQuery.getText().toString());
+                    viewModel.searchGitHubRepos(etSearchQuery.getText().toString());
                     return true;
                 }
                 return false;
@@ -58,22 +59,5 @@ public class MainActivity extends AppCompatActivity implements SearchViewContrac
         rvRepos.setHasFixedSize(true);
         rvAdapter = new SearchResultRvAdapter();
         rvRepos.setAdapter(rvAdapter);
-    }
-
-    @Override
-    public void displaySearchResults(@NonNull List<SearchResult> searchResults,
-                                     @Nullable Integer totalCount) {
-        rvAdapter.updateResults(searchResults);
-        tvStatus.setText(String.format(Locale.US, "Number of results: %d", totalCount));
-    }
-
-    @Override
-    public void displayError() {
-        Toast.makeText(this, "some error happened", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void displayError(String s) {
-        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
     }
 }
