@@ -62,12 +62,13 @@ public class SearchPresenterTest {
         Mockito.doReturn(searchResponse).when(response).body();
         List<SearchResult> searchResults = Collections.singletonList(new SearchResult());
         Mockito.doReturn(searchResults).when(searchResponse).getSearchResults();
+        Mockito.doReturn(101).when(searchResponse).getTotalCount();
 
         // Trigger
         presenter.handleGitHubResponse(response);
 
         // Validation
-        Mockito.verify(viewContract, Mockito.times(1)).displaySearchResults(searchResults);
+        Mockito.verify(viewContract, Mockito.times(1)).displaySearchResults(searchResults, 101);
     }
 
     @SuppressWarnings("unchecked")
