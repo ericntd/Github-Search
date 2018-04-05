@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -14,9 +15,11 @@ import android.widget.Toast;
 import java.util.List;
 import java.util.Locale;
 
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import tech.ericntd.githubsearch.R;
+import tech.ericntd.githubsearch.models.SearchResponse;
 import tech.ericntd.githubsearch.models.SearchResult;
 import tech.ericntd.githubsearch.repositories.GitHubApi;
 import tech.ericntd.githubsearch.repositories.GitHubRepository;
@@ -25,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements SearchViewContrac
 
     private SearchResultRvAdapter rvAdapter;
     private TextView tvStatus;
+    public GitHubRepository repository;
+    private SearchPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,14 +37,15 @@ public class MainActivity extends AppCompatActivity implements SearchViewContrac
         setContentView(R.layout.activity_main);
 
         tvStatus = findViewById(R.id.tv_status);
+        tvStatus.setVisibility(View.VISIBLE);
         final EditText etSearchQuery = findViewById(R.id.et_search_query);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.github.com")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        GitHubRepository repository = new GitHubRepository(retrofit.create(GitHubApi.class));
-        final SearchPresenterContract presenter = new SearchPresenter(this, repository);
+        repository = new GitHubRepository(retrofit.create(GitHubApi.class));
+        presenter = new SearchPresenter(this, repository);
 
         etSearchQuery.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -47,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements SearchViewContrac
                                           int actionId,
                                           KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    presenter.searchGitHubRepos(etSearchQuery.getText().toString());
+                    search(etSearchQuery.getText().toString());
                     return true;
                 }
                 return false;
@@ -58,6 +64,26 @@ public class MainActivity extends AppCompatActivity implements SearchViewContrac
         rvRepos.setHasFixedSize(true);
         rvAdapter = new SearchResultRvAdapter();
         rvRepos.setAdapter(rvAdapter);
+    }
+
+    public void search(String query) {
+//        presenter.searchGitHubRepos(s);
+        if (query != null && query.length() > 0) {
+            repository.searchRepos(query, new GitHubRepository.GitHubRepositoryCallback() {
+                @Override
+                public void handleGitHubResponse(Response<SearchResponse> response) {
+                    renderSuccess(response);
+                }
+
+                @Override
+                public void handleGitHubError() {
+
+                }
+            });
+        }
+    }
+
+    private void renderSuccess(Response<SearchResponse> response) {
     }
 
     @Override
