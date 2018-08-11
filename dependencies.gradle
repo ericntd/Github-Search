@@ -1,0 +1,9 @@
+ext {
+    minSdk = 16
+    local = [
+            core: ":core",
+    ]
+    droid = [
+            "appcompat7": "com.android.support:appcompat-v7:27.1.1",
+    ]
+}

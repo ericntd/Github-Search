@@ -1,5 +1,7 @@
 package tech.ericntd.githubsearch;
 
+import com.eric.core.NetworkModule;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -10,17 +12,17 @@ import tech.ericntd.githubsearch.repositories.GitHubApi;
 import tech.ericntd.githubsearch.repositories.GitHubRepository;
 import tech.ericntd.githubsearch.repositories.RealGitHubRepositoryImpl;
 
-@Module
+@Module(includes = {NetworkModule.class})
 public class AppModule {
 
-    @Provides
-    @Singleton
-    Retrofit provideRetrofit() {
-        return new Retrofit.Builder()
-                .baseUrl("https://api.github.com")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-    }
+//    @Provides
+//    @Singleton
+//    Retrofit provideRetrofit() {
+//        return new Retrofit.Builder()
+//                .baseUrl("https://api.github.com")
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .build();
+//    }
 
     @Provides
     @Singleton

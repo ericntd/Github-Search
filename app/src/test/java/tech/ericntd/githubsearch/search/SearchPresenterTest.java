@@ -69,9 +69,9 @@ public class SearchPresenterTest {
         Mockito.doReturn(true).when(response).isSuccessful();
         Mockito.doReturn(searchResponse).when(response).body();
         List<SearchResult> searchResults = new ArrayList<>();
-        searchResults.add(new SearchResult());
-        searchResults.add(new SearchResult());
-        searchResults.add(new SearchResult());
+        searchResults.add(new SearchResult("a"));
+        searchResults.add(new SearchResult("b"));
+        searchResults.add(new SearchResult("c"));
         Mockito.doReturn(searchResults).when(searchResponse).getSearchResults();
 
         presenter.handleGitHubResponse(response);

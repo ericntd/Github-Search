@@ -1,5 +1,7 @@
 package tech.ericntd.githubsearch;
 
+import com.eric.core.CoreComponent;
+
 import javax.inject.Singleton;
 
 import dagger.Component;
