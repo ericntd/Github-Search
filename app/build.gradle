@@ -35,19 +35,13 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
-//    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-//    compile 'com.google.code.gson:gson:2.8.2'
-//    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
-
     compile 'com.android.support:recyclerview-v7:26.1.0'
 
     testCompile "org.mockito:mockito-core:2.12.0"
     implementation 'com.android.support.test.espresso:espresso-idling-resource:3.0.1'
 
-//    compile 'com.google.dagger:dagger:2.15'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.15'
     annotationProcessor 'com.google.dagger:dagger-android-processor:2.15'
-//    compile 'com.google.dagger:dagger-android-support:2.15'
 
     api project(':core')
 }
